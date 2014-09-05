@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/tx 
+        http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/aop 
+        http://www.springframework.org/schema/aop/spring-aop.xsd">
+ 
+<!-- Note the value of id attribute
+	By default the Spring plugin works with Spring to autowire the dependencies of the ActionClass by "name." 
+	Spring will create an object of class MessageServiceImpl and provide that object to any ActionSupport class that has a setMessageService method with an argument of type MessageService. -->
+<bean id="messageService" class="org.apache.struts.service.impl.MessageServiceImpl" />
+
+<!-- Add the bean node below to support spring create the ActionSupport class -->
+<bean id="personManagementAction" class="org.apache.struts.personmanagement.action.PersonManagementAction" >
+    <property name="messageService" ref="messageService" />
+</bean>
+
+<bean id="registrantService" class="org.apache.struts.service.impl.RegistrantServiceImpl" />
+<bean id="carModelsService" class="org.apache.struts.service.impl.CarModelsServiceImpl" />
+<bean id="registerAction" class="org.apache.struts.register.action.RegisterAction" >
+    <property name="carModelsService" ref="carModelsService" />
+    <property name="registrantService" ref="registrantService" />
+</bean>
+
+<!--  
+<tx:annotation-driven transaction-manager="transactionManager"/>
+<bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+     <property name="sessionFactory" ref="sessionFactory"/>
+</bean>
+<bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+	<property name="dataSource" ref="dataSource" />
+	<property name="packagesToScan" value="org.baeldung.spring.persistence.model" />
+    <property name="hibernateProperties">
+          <props>
+              <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+              <prop key="hibernate.show_sql">true</prop>
+              <prop key="hibernate.format_sql">false</prop>
+              <prop key="hibernate.use_sql_comments">false</prop>
+              <prop key="hibernate.cache.use_second_level_cache">false</prop>
+          </props>
+    </property>
+</bean>
+<bean id="dataSource" class="org.apache.tomcat.dbcp.dbcp.BasicDataSource" destroy-method="close">
+      <property name="driverClassName" value="org.hsqldb.jdbcDriver"/>
+      <property name="url" value="${jdbc.url}" />
+      <property name="username" value="${jdbc.user}" />
+      <property name="password" value="${jdbc.pass}" />
+</bean>
+-->
+
+</beans>

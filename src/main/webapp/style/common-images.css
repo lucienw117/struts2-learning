@@ -1,0 +1,40 @@
+img.pagenav-first-off, input.pagenav-first-off {
+	background: url(../images/common-images.png) no-repeat -34px -129px;
+	width: 19px;
+	height: 18px;
+}
+img.pagenav-previous-off, input.pagenav-previous-off {
+	background: url(../images/common-images.png) no-repeat -54px -127px;
+	width: 40px;
+	height: 42px;
+}
+img.pagenav-next-off, input.pagenav-next-off {
+	background: url(../images/common-images.png) no-repeat -74px -129px;
+	width: 19px;
+	height: 18px;
+}
+/* img.pagenav-lastpage-off, input.pagenav-lastpage-off { */
+	background: url(../images/common-images.png) no-repeat -95px -129px;
+	width: 19px;
+	height: 18px;
+}
+img.pagenav-first, input.pagenav-first {
+	background: url(../images/common-images.png) no-repeat -34px -151px;
+	width: 19px;
+	height: 18px;
+}
+img.pagenav-previous, input.pagenav-previous {
+	background: url(../images/common-images.png) no-repeat -55px -151px;
+	width: 19px;
+	height: 18px;
+}
+img.pagenav-next, input.pagenav-next {
+	background: url(../images/common-images.png) no-repeat -75px -151px;
+	width: 19px;
+	height: 18px;
+}
+img.pagenav-lastpage, input.pagenav-lastpage {
+	background: url(../images/common-images.png) no-repeat -96px -151px;
+	width: 19px;
+	height: 18px;
+}

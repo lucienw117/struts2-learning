@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="struts2-examples" default="deploy" basedir=".">
+	<property name="tomcat.home" value="D:\apache-tomcat-6.0.39" />
+	<property name="eclipse.server.path" value="E:\Eclipse-Work\workspace\Learning_Workspace\.metadata\.plugins\org.eclipse.wst.server.core\tmp0" />
+	<target name="clean" description="clean archive file and uncompressed folder in web app container" >
+		<delete dir="${tomcat.home}\webapps\${ant.project.name}"/>
+		<delete file="${tomcat.home}\webapps\${ant.project.name}.war"/>
+	</target>
+	<target name="deploy" description="copy archive file to web app container" depends="clean">
+		<copy file="${basedir}\target\${ant.project.name}.war" todir="${tomcat.home}\webapps" />
+	</target>
+	<target name="clean eclipse server" description="clean jsp cache in eclipse build-in server path" >
+		<!-- deletes all files and subdirectories of ${eclipse.server.path}, without ${eclipse.server.path} itself -->
+		<delete includeemptydirs="true">
+		    <fileset dir="${eclipse.server.path}\work\Catalina\localhost\${ant.project.name}\org\apache\jsp" includes="**/*"/>
+		</delete>
+	</target>
+</project>

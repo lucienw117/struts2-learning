@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+            http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans.xsd">
+ 
+<!-- Note the value of id attribute
+	By default the Spring plugin works with Spring to autowire the dependencies of the ActionClass by "name." 
+	Spring will create an object of class MessageServiceImpl and provide that object to any ActionSupport class that has a setMessageService method with an argument of type MessageService. -->
+<bean id="messageService" class="org.apache.struts.service.impl.MessageServiceImpl" />
+
+<!-- Add the bean node below to support spring create the ActionSupport class -->
+<bean id="personManagementAction" class="org.apache.struts.personmanagement.action.PersonManagementAction" >
+    <property name="messageService" ref="messageService" />
+</bean>
+
+<bean id="registrantService" class="org.apache.struts.service.impl.RegistrantServiceImpl" />
+<bean id="carModelsService" class="org.apache.struts.service.impl.CarModelsServiceImpl" />
+<bean id="registerAction" class="org.apache.struts.register.action.RegisterAction" >
+    <property name="carModelsService" ref="carModelsService" />
+    <property name="registrantService" ref="registrantService" />
+</bean>
+
+</beans>

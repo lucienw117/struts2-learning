@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<constant name="struts.devMode" value="true" />
+	<!-- The keys and values defined in the property file will be available 
+		to all the view pages that are rendered after executing an Action class. 
+		Note the name doesn't have to be global -->
+	<constant name="struts.custom.i18n.resources" value="global" />
+	
+	<!-- turning off the option to use the dynamic method invocation -->
+	<!-- need to provided: optional -->
+	<constant name="struts.enable.DynamicMethodInvocation" value="false" />
+	
+	<!-- Change the theme for the entire application. Other available value: simple, css_xhtml -->
+	<!-- need to provided: optional -->
+	<constant name="struts.ui.theme" value="xhtml" />
+
+	<package name="basicstruts2" extends="struts-default">
+		<!-- The "jasper" result type is available from either extending the "jasperreports-default" package or by defining the result type manually. -->
+		<!-- Below is defining result type manually, see another package node, that is extending the "jasperreports-default" package -->
+		<!-- 
+		<result-types>
+    		<result-type name="jasper" class="org.apache.struts2.views.jasperreports.JasperReportsResult"/>
+		</result-types>
+		-->
+		
+		<!-- Specify Specific Interceptors For A Package -->
+		<!-- Enable logging of the exceptions being handled by the Struts 2 framework -->
+		<interceptors>
+			<interceptor-stack name="appDefaultStack">
+				<interceptor-ref name="timer" /> 
+	            <interceptor-ref name="logger" /> 
+	            <!-- note: we are still executing all the other interceptors by including the defaultStack below -->
+				<interceptor-ref name="defaultStack">
+					<!-- specify parameter "logEnabled" of Exception Interceptor -->
+					<param name="exception.logEnabled">true</param>
+					<!-- specify parameter "logLevel" of Exception Interceptor, defaut is debug -->
+					<param name="exception.logLevel">ERROR</param>
+					<!-- Instead of having each action that implements SessionAware also implement the ParameterNameAware interface you can tell the params interceptor to exclude specific request attributes for all actions in a package. -->
+					<param name="params.excludeParams">dojo\..*,^struts\..*,^session\..*,^request\..*,^application\..*,^servlet(Request|Response)\..*,parameters\...*</param>
+				</interceptor-ref>
+			</interceptor-stack>
+		</interceptors>
+		<default-interceptor-ref name="appDefaultStack" />
+
+		<!-- Global Exception Handling -->
+		<!-- If a SecurityBreachException is thrown but not caught, the Struts 
+			2 Action class will return a result of "securityerror". All other uncaught 
+			exceptions will cause the Struts 2 Action class to return a result of "error". -->
+		<!-- 
+		<global-results> 
+			<result name="securityerror">/securityerror.jsp</result> 
+			<result name="error">/error.jsp</result> 
+		</global-results> 
+		<global-exception-mappings> 
+			<exception-mapping exception="org.apache.struts.register.exceptions.SecurityBreachException" result="securityerror" />
+			<exception-mapping exception="java.lang.Exception" result="error" />
+		</global-exception-mappings> 
+		-->
+
+		<!-- If no class attribute is specified the framework will assume success and render the result index.jsp -->
+		<action name="index">
+			<!-- If no name value for the result node is specified the success value is the default -->
+			<result>index.jsp</result>
+		</action>
+
+		<!-- If the URL is hello.action the call the execute method of class HelloWorldAction. 
+			If the result returned by the execute method is success render the HelloWorld.jsp -->
+		<action name="hello" class="org.apache.struts.helloworld.action.HelloWorldAction" method="execute">
+			<result name="success">/jsp/helloworld.jsp</result>
+		</action>
+
+		<action name="register" class="registerAction" method="execute">
+			<result name="success">/jsp/thankyou.jsp</result>
+			<result name="input">/jsp/register.jsp</result>
+		</action>
+
+		<!-- The input method is inherited by class Register from class ActionSupport. 
+			The default behavior of the inherited input method is to return the String 
+			input. -->
+		<action name="registerInput" class="registerAction" method="input">
+			<result name="input">/jsp/register.jsp</result>
+		</action>
+
+		<!-- wildcard method selection technique to enable the Struts 2 framework to dynamically select the correct method to call at runtime -->
+		<!-- Any action name values that end in "Person" will be handled by this action mapping. 
+			Whatever value is before "Person" will be the value used for the method attribute (the {1} place holder will be replaced with that value) -->
+		<!-- 
+		<action name="*Person" class="org.apache.struts.personmanagement.action.PersonManagementAction" method="{1}">
+			<result name="success">/jsp/personmanagement.jsp</result>
+		</action>
+		-->
+		<!-- The "action" node below made Spring to create the ActionSupport class -->
+		<!-- Note the value of "class" attribute, instead of specify the Action class 
+			we made it the same as the value of "id" attribute in applicationContext.xml here -->
+		<action name="*Person" class="personManagementAction" method="{1}">
+			<!-- Specify Specific Interceptors For An Action -->
+			<!-- The timer interceptor logs the amount of time (in milliseconds) for execution of the Action. -->
+			<!-- consult to http://struts.apache.org/development/2.x/docs/timer-interceptor.html -->
+			<interceptor-ref name="timer" />
+			<!-- The logger interceptor logs the start and end of the execution of an Action. -->
+			<!-- consult to http://struts.apache.org/development/2.x/docs/logger-interceptor.html -->
+		    <interceptor-ref name="logger" />
+		    <interceptor-ref name="defaultStack">
+		        <param name="exception.logEnabled">true</param>
+		        <param name="exception.logLevel">ERROR</param>
+		    </interceptor-ref>
+			<result name="success">/jsp/personmanagement.jsp</result>
+		</action>
+		
+		<action name="helloHTTPSession" class="org.apache.struts.hellohttpsession.action.HelloHttpSessionAction">
+			<result name="success">/jsp/hellohttpsession.jsp</result>
+		</action>
+		
+		<!-- We use the action node below if we don't have a specified package for Jasperreport Action -->
+		<!--  
+		<action name="myJasperTest" class="org.apache.jasperreports.action.JasperAction">
+	        <result name="success" type="jasper">
+	            <param name="location">/jasper/our_compiled_template.jasper</param>
+	            <param name="dataSource">myList</param>
+	            <param name="format">PDF</param>
+	        </result>
+	    </action>
+	    -->
+
+		<!-- Exception Handling Per Action -->
+		<!-- An action-specific exception mapping will take precedence if the same exception is also mapped globally. -->
+		<!-- 
+		<action name="actionspecificexception" class="org.apache.struts.register.action.Register" 
+			method="throwSecurityException"> 
+			<exception-mapping exception="org.apache.struts.register.exceptions.SecurityBreachException" result="login" /> 
+			<result>/register.jsp</result> 
+			<result name="login">/login.jsp</result> 
+		</action> 
+		-->
+		
+		<action name="helloJQuery">
+			<result>/jsp/hellojquery.jsp</result>
+		</action>
+		<action name="getWeather" class="org.apache.jqueryajax.action.JQueryAjaxAction">
+			<result type="stream">
+				<param name="contentType">text/html</param>
+				<param name="inputName">inputStream</param>
+			</result>
+		</action> 
+		
+		<action name="helloCSS">
+			<result>/jsp/hellocss.jsp</result>
+		</action>
+		
+	</package>
+	
+	<package name="default" namespace="/" extends="jasperreports-default">
+	    <action name="myJasperTest" class="org.apache.jasperreports.action.JasperAction">
+	        <result name="success" type="jasper">
+	        	<!-- The "location" parameter defines the location of the compiled jasper file, which will be filled by Struts 2 with dataSource parameter -->
+	            <param name="location">/jasper/our_compiled_template.jasper</param>
+	            <!-- Report data comes from "myList" property in Action Bean -->
+	            <param name="dataSource">myList</param>
+	            <!-- The "format" parameter specifies the output format of the report. Possible values include PDF, CSV, XLS and HTML. -->
+	            <param name="format">PDF</param>
+	        </result>
+	    </action>
+	</package>
+</struts>
